@@ -19,3 +19,4 @@ Key features:
 This project is ideal for barbershops, salons, and local service businesses looking to establish an online presence and generate leads.
 
 #live website demo link
+https://hairsalonwebdemo.netlify.app
