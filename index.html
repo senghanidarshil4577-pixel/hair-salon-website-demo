@@ -3,122 +3,1523 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>UrbanCut Barber Shop</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+<title>AURUM — Luxury Hair Atelier</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@100;200;300;400&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
-body{background:#0f172a;color:#fff}
-header{display:flex;justify-content:space-between;padding:15px 30px;background:#020617}
-nav a{color:#fff;margin-left:20px;text-decoration:none}
-.hero{height:90vh;background:linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),url('https://images.unsplash.com/photo-1517832606299-7ae9b720a186');background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff}
-.hero h1{font-size:48px}
-.btn{background:#f59e0b;padding:12px 25px;border-radius:30px;text-decoration:none;color:#000;margin-top:20px;font-weight:600}
-.section{padding:60px 20px;text-align:center}
-.cards{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
-.card{background:#111827;padding:20px;border-radius:10px;width:260px;box-shadow:0 5px 10px rgba(0,0,0,0.3)}
-.about{background:#020617}
-.contact{background:#020617}
-footer{background:#020617;color:#fff;padding:20px;text-align:center}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;padding:15px;border-radius:50%;color:#fff;text-decoration:none}
-form input,form select{width:100%;padding:10px;margin:10px 0;border:none;border-radius:5px}
-form button{background:#f59e0b;color:#000;padding:10px;border:none;border-radius:5px;cursor:pointer;font-weight:600}
-iframe{width:100%;height:300px;border:none;border-radius:10px}
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dark: #8B6914;
+    --cream: #F9F3E8;
+    --deep: #0D0A06;
+    --charcoal: #1A1410;
+    --warm: #2A1F12;
+    --text: #E8DCC8;
+    --muted: #7A6A52;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep);
+    color: var(--text);
+    font-family: 'Josefin Sans', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.25s ease, width 0.3s, height 0.3s;
+  }
+  .cursor-ring.expand { width: 70px; height: 70px; }
+
+  /* CANVAS BG */
+  #bgCanvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    opacity: 0.7;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 60px;
+    background: linear-gradient(to bottom, rgba(13,10,6,0.95), transparent);
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--gold-light);
+    text-decoration: none;
+  }
+  .logo span { font-style: italic; color: var(--gold); }
+  .nav-links {
+    display: flex;
+    gap: 48px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-book {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--deep);
+    background: var(--gold);
+    padding: 12px 28px;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.2s;
+  }
+  .nav-book:hover { background: var(--gold-light); transform: scale(1.03); }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 20px;
+    overflow: hidden;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 32px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 0.5s forwards;
+  }
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 10vw, 9rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.01em;
+    color: var(--cream);
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1.2s 0.7s forwards;
+  }
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold-light);
+    display: block;
+  }
+  .hero-subtitle {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 36px;
+    max-width: 400px;
+    line-height: 2;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 1s forwards;
+  }
+  .hero-cta {
+    margin-top: 56px;
+    display: flex;
+    gap: 20px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s 1.2s forwards;
+  }
+  .btn-primary {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--deep);
+    background: var(--gold);
+    padding: 18px 48px;
+    text-decoration: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: var(--gold-light);
+    transition: left 0.4s ease;
+  }
+  .btn-primary:hover::before { left: 0; }
+  .btn-primary span { position: relative; z-index: 1; }
+  .btn-secondary {
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 18px 48px;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover { background: rgba(201,168,76,0.1); }
+
+  /* SCISSOR ANIMATION */
+  .scissors-wrap {
+    position: absolute;
+    opacity: 0;
+    animation: fadeUp 1s 1.5s forwards;
+  }
+  .scissors-wrap svg {
+    width: 80px;
+    filter: drop-shadow(0 0 20px rgba(201,168,76,0.4));
+    animation: scissorFloat 6s ease-in-out infinite;
+  }
+  @keyframes scissorFloat {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+  }
+
+  /* 3D CARDS SECTION */
+  .services {
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px;
+  }
+  .section-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    text-align: center;
+    color: var(--cream);
+    margin-bottom: 80px;
+  }
+  .section-title em { font-style: italic; color: var(--gold-light); }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .card-3d {
+    background: linear-gradient(135deg, rgba(42,31,18,0.9), rgba(26,20,16,0.95));
+    border: 1px solid rgba(201,168,76,0.15);
+    padding: 52px 40px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transform-style: preserve-3d;
+    cursor: none;
+  }
+  .card-3d::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.5s;
+  }
+  .card-3d:hover::before { transform: scaleX(1); }
+  .card-3d:hover {
+    transform: translateY(-12px) rotateX(5deg);
+    box-shadow: 0 40px 80px rgba(0,0,0,0.5), 0 0 40px rgba(201,168,76,0.1);
+  }
+  .card-icon {
+    width: 60px; height: 60px;
+    margin-bottom: 32px;
+    filter: drop-shadow(0 0 12px rgba(201,168,76,0.5));
+  }
+  .card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--cream);
+    margin-bottom: 16px;
+    letter-spacing: 0.02em;
+  }
+  .card-desc {
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    line-height: 2;
+    color: var(--muted);
+  }
+  .card-price {
+    margin-top: 32px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    letter-spacing: 0.05em;
+  }
+  .card-glow {
+    position: absolute;
+    bottom: -40px; right: -40px;
+    width: 150px; height: 150px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(201,168,76,0.08), transparent 70%);
+    pointer-events: none;
+  }
+
+  /* MARQUEE */
+  .marquee-section {
+    position: relative;
+    z-index: 1;
+    padding: 60px 0;
+    border-top: 1px solid rgba(201,168,76,0.1);
+    border-bottom: 1px solid rgba(201,168,76,0.1);
+    overflow: hidden;
+    background: rgba(201,168,76,0.03);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 60px;
+    animation: marqueeScroll 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .marquee-dot {
+    color: var(--gold);
+    margin: 0 10px;
+  }
+  @keyframes marqueeScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ABOUT */
+  .about {
+    position: relative;
+    z-index: 1;
+    padding: 140px 60px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+  }
+  .about-visual {
+    position: relative;
+    height: 600px;
+  }
+  .about-frame {
+    position: absolute;
+    width: 320px; height: 420px;
+    border: 1px solid rgba(201,168,76,0.25);
+    overflow: hidden;
+  }
+  .about-frame-1 { top: 0; left: 0; }
+  .about-frame-2 { bottom: 0; right: 0; border-color: rgba(201,168,76,0.12); }
+  .frame-inner {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--warm), var(--charcoal));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .frame-pattern {
+    width: 80%;
+    height: 80%;
+    position: relative;
+  }
+  /* SVG hair wave pattern */
+  .gold-line {
+    position: absolute;
+    width: 100%; height: 100%;
+  }
+  .about-accent {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px; height: 120px;
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-align: center;
+    line-height: 1.6;
+    animation: rotate 20s linear infinite;
+  }
+  @keyframes rotate {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+  .about-text .section-label { text-align: left; }
+  .about-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 28px;
+    line-height: 1.15;
+  }
+  .about-title em { font-style: italic; color: var(--gold-light); }
+  .about-body {
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    line-height: 2.2;
+    color: var(--muted);
+    margin-bottom: 40px;
+  }
+  .stats-row {
+    display: flex;
+    gap: 48px;
+    margin-top: 48px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(201,168,76,0.15);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--gold);
+    display: block;
+  }
+  .stat-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* TEAM */
+  .team {
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px;
+    background: rgba(42,31,18,0.15);
+  }
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .stylist-card {
+    position: relative;
+    overflow: hidden;
+    cursor: none;
+    transition: transform 0.4s;
+  }
+  .stylist-card:hover { transform: translateY(-8px); }
+  .stylist-visual {
+    height: 300px;
+    background: linear-gradient(135deg, var(--warm), var(--charcoal));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .stylist-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(13,10,6,0.8), transparent);
+  }
+  .stylist-avatar {
+    font-size: 5rem;
+    opacity: 0.4;
+    filter: grayscale(1);
+  }
+  .stylist-info {
+    padding: 24px 0;
+  }
+  .stylist-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    color: var(--cream);
+    margin-bottom: 6px;
+  }
+  .stylist-role {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  /* TESTIMONIALS */
+  .testimonials {
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px;
+    text-align: center;
+  }
+  .testimonial-slider {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .testimonial-item {
+    display: none;
+    animation: fadeIn 0.5s ease;
+  }
+  .testimonial-item.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--cream);
+    line-height: 1.6;
+    margin-bottom: 36px;
+  }
+  .testimonial-author {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .testimonial-stars {
+    color: var(--gold);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    margin-bottom: 28px;
+  }
+  .slider-dots {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 48px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.4); }
+
+  /* BOOKING */
+  .booking {
+    position: relative;
+    z-index: 1;
+    padding: 120px 60px;
+    background: linear-gradient(135deg, rgba(42,31,18,0.3), rgba(13,10,6,0.9));
+  }
+  .booking-inner {
+    max-width: 600px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  .booking-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 300;
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .booking-title em { font-style: italic; color: var(--gold-light); }
+  .booking-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    line-height: 2;
+    color: var(--muted);
+    margin-bottom: 60px;
+  }
+  .booking-form {
+    display: grid;
+    gap: 16px;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-input {
+    background: rgba(42,31,18,0.6);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--text);
+    padding: 16px 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .form-input::placeholder { color: var(--muted); }
+  .form-select {
+    background: rgba(42,31,18,0.6);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--text);
+    padding: 16px 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    outline: none;
+    cursor: none;
+  }
+  .form-select option { background: var(--charcoal); }
+  .btn-submit {
+    width: 100%;
+    background: var(--gold);
+    color: var(--deep);
+    border: none;
+    padding: 20px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.3s, transform 0.2s;
+    margin-top: 8px;
+  }
+  .btn-submit:hover { background: var(--gold-light); transform: scale(1.01); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 1;
+    padding: 80px 60px 40px;
+    border-top: 1px solid rgba(201,168,76,0.1);
+  }
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px;
+    margin-bottom: 60px;
+  }
+  .footer-brand .logo { font-size: 2rem; display: inline-block; margin-bottom: 20px; }
+  .footer-tagline {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    line-height: 2;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .social-links { display: flex; gap: 20px; }
+  .social-link {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(201,168,76,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.75rem;
+    transition: all 0.3s;
+  }
+  .social-link:hover { border-color: var(--gold); color: var(--gold); }
+  .footer-col h4 {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .footer-links { list-style: none; }
+  .footer-links li { margin-bottom: 12px; }
+  .footer-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-bottom {
+    padding-top: 40px;
+    border-top: 1px solid rgba(201,168,76,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+  }
+  .footer-legal {
+    display: flex;
+    gap: 32px;
+  }
+  .footer-legal a {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-legal a:hover { color: var(--gold); }
+
+  /* GOLD DIVIDER */
+  .gold-divider {
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 28px auto;
+  }
+  .gold-divider.left { margin: 28px 0; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* PARTICLE HAIR STRANDS */
+  .strand {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    animation: strandFall linear infinite;
+  }
+  @keyframes strandFall {
+    0% { opacity: 0; transform: translateY(-20px) rotate(var(--rot)); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(200px) rotate(calc(var(--rot) + 30deg)); }
+  }
+
+  /* ── HAMBURGER MENU ── */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    z-index: 200;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 24px;
+    height: 1.5px;
+    background: var(--gold);
+    transition: transform 0.35s, opacity 0.35s;
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  /* Mobile nav drawer */
+  .mobile-nav {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(13,10,6,0.98);
+    z-index: 150;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 36px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+  }
+  .mobile-nav.open { opacity: 1; pointer-events: all; }
+  .mobile-nav a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    color: var(--cream);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .mobile-nav a:hover { color: var(--gold-light); }
+  .mobile-nav .nav-book-mob {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--deep);
+    background: var(--gold);
+    padding: 16px 40px;
+    margin-top: 12px;
+    border-radius: 0;
+  }
+
+  /* ── TABLET (≤ 1024px) ── */
+  @media (max-width: 1024px) {
+    nav { padding: 22px 36px; }
+    .nav-links { gap: 28px; }
+    .cards-grid { grid-template-columns: repeat(2, 1fr); }
+    .about { gap: 60px; padding: 100px 36px; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+  }
+
+  /* ── MOBILE (≤ 768px) ── */
+  @media (max-width: 768px) {
+    /* hide desktop cursor on touch */
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+
+    /* nav */
+    nav { padding: 18px 20px; }
+    .nav-links { display: none; }
+    .nav-book { display: none; }
+    .hamburger { display: flex; }
+    .mobile-nav { display: flex; }
+
+    /* hero */
+    .hero { padding: 100px 24px 60px; min-height: 100svh; }
+    .hero-eyebrow { font-size: 0.6rem; letter-spacing: 0.25em; margin-bottom: 20px; }
+    .hero-title { font-size: clamp(3rem, 13vw, 5rem); line-height: 1; }
+    .hero-subtitle { font-size: 0.68rem; letter-spacing: 0.15em; margin-top: 24px; max-width: 300px; }
+    .hero-cta { flex-direction: column; align-items: center; gap: 14px; margin-top: 36px; width: 100%; }
+    .btn-primary, .btn-secondary { padding: 16px 32px; font-size: 0.65rem; width: 100%; text-align: center; max-width: 280px; }
+    /* hide floating scissors on mobile */
+    .scissors-wrap { display: none; }
+
+    /* services */
+    .services { padding: 72px 20px; }
+    .section-title { margin-bottom: 44px; font-size: clamp(2rem, 8vw, 3rem); }
+    .cards-grid { grid-template-columns: 1fr; gap: 18px; }
+    .card-3d { padding: 36px 28px; }
+
+    /* marquee */
+    .marquee-item { font-size: 1.1rem; }
+
+    /* about */
+    .about {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 72px 20px;
+    }
+    .about-visual { height: 260px; order: -1; }
+    .about-frame { width: 140px; height: 190px; }
+    .about-frame-1 { top: 0; left: 10px; }
+    .about-frame-2 { bottom: 0; right: 10px; }
+    .about-accent { width: 80px; height: 80px; font-size: 0.45rem; }
+    .about-title { font-size: clamp(1.8rem, 7vw, 2.5rem); }
+    .stats-row { flex-wrap: wrap; gap: 28px; }
+    .stat-num { font-size: 2.4rem; }
+    .about-text .section-label { text-align: left; }
+
+    /* team */
+    .team { padding: 72px 20px; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .stylist-visual { height: 200px; }
+    .stylist-name { font-size: 1.1rem; }
+
+    /* testimonials */
+    .testimonials { padding: 72px 20px; }
+    .testimonial-quote { font-size: 1.05rem; }
+
+    /* booking */
+    .booking { padding: 72px 20px; }
+    .booking-inner { max-width: 100%; }
+    .booking-title { font-size: clamp(2rem, 8vw, 3rem); }
+    .form-row { grid-template-columns: 1fr; }
+    .form-input, .form-select { font-size: 0.8rem; padding: 14px 16px; }
+    .btn-submit { font-size: 0.68rem; padding: 18px; }
+
+    /* footer */
+    footer { padding: 60px 20px 32px; }
+    .footer-top { grid-template-columns: 1fr; gap: 36px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    .footer-legal { gap: 20px; }
+
+    /* gold divider centered */
+    .gold-divider.left { margin: 20px 0; }
+  }
+
+  /* ── SMALL PHONES (≤ 400px) ── */
+  @media (max-width: 400px) {
+    .hero-title { font-size: 2.8rem; }
+    .team-grid { grid-template-columns: 1fr; }
+    .cards-grid { gap: 14px; }
+    .card-3d { padding: 28px 20px; }
+    .stats-row { gap: 20px; }
+  }
 </style>
 </head>
-
 <body>
-<header>
-<h2>UrbanCut Barber</h2>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<canvas id="bgCanvas"></canvas>
+
+<!-- NAV -->
 <nav>
-<a href="#">Home</a>
-<a href="#about">About</a>
-<a href="#services">Services</a>
-<a href="#booking">Book</a>
-<a href="#contact">Contact</a>
+  <a href="#" class="logo">A<span>U</span>RUM</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#about">Atelier</a></li>
+    <li><a href="#team">Stylists</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+  </ul>
+  <a href="#booking" class="nav-book">Book Now</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
-</header>
 
-<section class="hero">
-<h1>Sharp Cuts. Clean Style.</h1>
-<p>Professional barber services in Ahmedabad</p>
-<a href="#booking" class="btn">Book Haircut</a>
-</section>
-
-<section class="section about" id="about">
-<h2>About Us</h2>
-<p>UrbanCut Barber Shop is a modern grooming studio offering premium haircuts, beard styling, and grooming services.</p>
-<p>Our expert barbers ensure you get the perfect look with precision and style.</p>
-</section>
-
-<section class="section" id="services">
-<h2>Our Services</h2>
-<div class="cards">
-<div class="card">
-<h3>✂️ Haircut</h3>
-<p>Modern & classic styles</p>
+<!-- MOBILE NAV DRAWER -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#services" class="mob-link">Services</a>
+  <a href="#about" class="mob-link">Atelier</a>
+  <a href="#team" class="mob-link">Stylists</a>
+  <a href="#gallery" class="mob-link">Gallery</a>
+  <a href="#booking" class="mob-link nav-book-mob">Book Now</a>
 </div>
-<div class="card">
-<h3>🧔 Beard Styling</h3>
-<p>Sharp beard shaping</p>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-eyebrow">Est. 2008 — Luxury Hair Atelier</div>
+  <h1 class="hero-title">
+    Where Art<br>Meets <em>Hair</em>
+  </h1>
+  <p class="hero-subtitle">Bespoke hair artistry for the discerning individual. Every strand, every cut, a masterpiece.</p>
+  <div class="hero-cta">
+    <a href="#booking" class="btn-primary"><span>Reserve Your Visit</span></a>
+    <a href="#services" class="btn-secondary">Explore Services</a>
+  </div>
+
+  <!-- Floating scissors -->
+  <div class="scissors-wrap" style="position:absolute;top:20%;right:12%;opacity:0;animation:fadeUp 1s 1.8s forwards;">
+    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="18" cy="18" r="8" stroke="#C9A84C" stroke-width="1.5"/>
+      <circle cx="18" cy="62" r="8" stroke="#C9A84C" stroke-width="1.5"/>
+      <line x1="24" y1="22" x2="65" y2="55" stroke="#C9A84C" stroke-width="1.5"/>
+      <line x1="24" y1="58" x2="65" y2="25" stroke="#C9A84C" stroke-width="1.5"/>
+      <circle cx="44" cy="40" r="3" fill="#C9A84C" opacity="0.5"/>
+    </svg>
+  </div>
+
+  <!-- Floating comb -->
+  <div class="scissors-wrap" style="position:absolute;bottom:22%;left:10%;opacity:0;animation:fadeUp 1s 2s forwards;animation-delay:2s;">
+    <svg viewBox="0 0 60 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:70px;">
+      <rect x="1" y="1" width="58" height="8" rx="1" stroke="#C9A84C" stroke-width="1"/>
+      <line x1="8" y1="9" x2="8" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+      <line x1="16" y1="9" x2="16" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+      <line x1="24" y1="9" x2="24" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+      <line x1="32" y1="9" x2="32" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+      <line x1="40" y1="9" x2="40" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+      <line x1="48" y1="9" x2="48" y2="18" stroke="#C9A84C" stroke-width="1.2"/>
+    </svg>
+  </div>
+
+  <div style="position:absolute;bottom:48px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0.5;animation:fadeUp 1s 2.2s forwards;">
+    <span style="font-size:0.6rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--muted);">Scroll</span>
+    <div style="width:1px;height:50px;background:linear-gradient(to bottom,var(--gold),transparent);animation:scrollPulse 2s ease infinite;"></div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item">Precision Cuts<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Color Mastery<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Keratin Rituals<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bridal Styling<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Hair Extensions<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Scalp Therapy<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Balayage Art<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Luxury Treatments<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Precision Cuts<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Color Mastery<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Keratin Rituals<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bridal Styling<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Hair Extensions<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Scalp Therapy<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Balayage Art<span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Luxury Treatments<span class="marquee-dot">◆</span></span>
+  </div>
 </div>
-<div class="card">
-<h3>🔥 Fade Cut</h3>
-<p>Professional fade styles</p>
-</div>
-</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-label reveal">Our Offerings</div>
+  <h2 class="section-title reveal">Crafted <em>Experiences</em></h2>
+
+  <div class="cards-grid">
+    <div class="card-3d reveal">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <path d="M30 5 Q45 20 40 40 Q35 55 20 50 Q5 45 10 25 Q15 5 30 5Z" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <path d="M22 30 Q30 20 38 30" stroke="#C9A84C" stroke-width="1" stroke-dasharray="2 2"/>
+        <circle cx="30" cy="30" r="3" fill="#C9A84C" opacity="0.5"/>
+      </svg>
+      <div class="card-title">Precision Cuts</div>
+      <p class="card-desc">Architectural sculpting tailored to your bone structure, lifestyle, and aspirations. Every line deliberate, every angle perfected.</p>
+      <div class="card-price">From ₹1,800</div>
+      <div class="card-glow"></div>
+    </div>
+
+    <div class="card-3d reveal" style="transition-delay:0.1s">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="20" r="12" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <path d="M18 32 Q30 55 42 32" stroke="#C9A84C" stroke-width="1.2" fill="none"/>
+        <line x1="30" y1="8" x2="30" y2="2" stroke="#E8C97A" stroke-width="1"/>
+        <circle cx="30" cy="2" r="2" fill="#E8C97A"/>
+        <path d="M15 18 Q8 10 12 4" stroke="#C9A84C" stroke-width="0.8" stroke-dasharray="2 2"/>
+        <path d="M45 18 Q52 10 48 4" stroke="#C9A84C" stroke-width="0.8" stroke-dasharray="2 2"/>
+      </svg>
+      <div class="card-title">Color Artistry</div>
+      <p class="card-desc">From sun-kissed balayage to vivid fantasy palettes. Our colorists blend science with artistry for transformative results.</p>
+      <div class="card-price">From ₹3,500</div>
+      <div class="card-glow"></div>
+    </div>
+
+    <div class="card-3d reveal" style="transition-delay:0.2s">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <path d="M15 50 Q20 30 25 10 M25 10 Q30 30 35 50" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <path d="M10 55 Q15 35 22 15" stroke="#E8C97A" stroke-width="0.8" stroke-dasharray="2 3"/>
+        <path d="M50 55 Q45 35 38 15" stroke="#E8C97A" stroke-width="0.8" stroke-dasharray="2 3"/>
+        <ellipse cx="30" cy="52" rx="12" ry="3" stroke="#C9A84C" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="card-title">Luxury Treatments</div>
+      <p class="card-desc">Deep repair masks, keratin rituals, scalp therapies and botanical infusions. Restore, strengthen, and illuminate.</p>
+      <div class="card-price">From ₹2,200</div>
+      <div class="card-glow"></div>
+    </div>
+
+    <div class="card-3d reveal" style="transition-delay:0.15s">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <path d="M20 10 Q30 5 40 10 L45 45 Q30 55 15 45 Z" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <path d="M25 25 Q30 20 35 25" stroke="#E8C97A" stroke-width="1"/>
+        <circle cx="30" cy="30" r="5" stroke="#C9A84C" stroke-width="1" fill="none"/>
+      </svg>
+      <div class="card-title">Bridal Styling</div>
+      <p class="card-desc">For the most important moments. Bespoke updos, intricate braiding and timeless waves. Your vision, brought to life.</p>
+      <div class="card-price">From ₹5,000</div>
+      <div class="card-glow"></div>
+    </div>
+
+    <div class="card-3d reveal" style="transition-delay:0.25s">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <rect x="12" y="10" width="36" height="8" rx="2" stroke="#C9A84C" stroke-width="1.5"/>
+        <line x1="18" y1="18" x2="16" y2="50" stroke="#C9A84C" stroke-width="1.2"/>
+        <line x1="26" y1="18" x2="25" y2="50" stroke="#E8C97A" stroke-width="1"/>
+        <line x1="34" y1="18" x2="35" y2="50" stroke="#E8C97A" stroke-width="1"/>
+        <line x1="42" y1="18" x2="44" y2="50" stroke="#C9A84C" stroke-width="1.2"/>
+        <path d="M14 50 Q30 48 46 50" stroke="#C9A84C" stroke-width="1"/>
+      </svg>
+      <div class="card-title">Extensions</div>
+      <p class="card-desc">Premium human hair extensions, expertly applied for natural movement, volume, and length you've always dreamed of.</p>
+      <div class="card-price">From ₹8,000</div>
+      <div class="card-glow"></div>
+    </div>
+
+    <div class="card-3d reveal" style="transition-delay:0.3s">
+      <svg class="card-icon" viewBox="0 0 60 60" fill="none">
+        <circle cx="30" cy="30" r="20" stroke="#C9A84C" stroke-width="1.5" fill="none"/>
+        <path d="M20 20 Q30 10 40 20 Q50 30 40 40 Q30 50 20 40 Q10 30 20 20Z" stroke="#E8C97A" stroke-width="0.8" fill="none" opacity="0.5"/>
+        <circle cx="30" cy="30" r="5" fill="#C9A84C" opacity="0.3"/>
+        <circle cx="30" cy="30" r="2" fill="#C9A84C"/>
+      </svg>
+      <div class="card-title">Scalp Rituals</div>
+      <p class="card-desc">Therapeutic massages, detoxifying treatments and growth stimulation rituals. The foundation of beautiful hair begins here.</p>
+      <div class="card-price">From ₹1,500</div>
+      <div class="card-glow"></div>
+    </div>
+  </div>
 </section>
 
-<section class="section" id="booking">
-<h2>Book Appointment</h2>
-<form onsubmit="sendData(event)">
-<input type="text" id="name" placeholder="Full Name" required>
-<input type="tel" id="phone" placeholder="Mobile Number" required>
-<select id="service">
-<option>Haircut</option>
-<option>Beard Styling</option>
-<option>Fade Cut</option>
-</select>
-<input type="date" id="date" required>
-<button type="submit">Book Now</button>
-</form>
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-visual">
+    <div class="about-frame about-frame-1">
+      <div class="frame-inner">
+        <svg viewBox="0 0 200 300" width="100%" height="100%" fill="none">
+          <path d="M100 20 Q140 60 130 120 Q120 180 80 200 Q40 220 50 270 Q55 290 100 285" stroke="#C9A84C" stroke-width="1.5" opacity="0.8"/>
+          <path d="M70 10 Q110 50 100 110 Q90 170 50 190 Q10 210 20 260 Q25 280 70 275" stroke="#8B6914" stroke-width="1" opacity="0.5"/>
+          <path d="M130 15 Q170 55 160 115 Q150 175 110 195 Q70 215 80 265 Q85 285 130 280" stroke="#E8C97A" stroke-width="0.8" opacity="0.4"/>
+          <!-- sparkles -->
+          <circle cx="100" cy="80" r="2" fill="#C9A84C" opacity="0.8"/>
+          <circle cx="85" cy="150" r="1.5" fill="#E8C97A" opacity="0.6"/>
+          <circle cx="115" cy="200" r="2" fill="#C9A84C" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="about-frame about-frame-2">
+      <div class="frame-inner">
+        <svg viewBox="0 0 200 250" width="100%" height="100%" fill="none">
+          <!-- scissors large -->
+          <circle cx="50" cy="60" r="22" stroke="#C9A84C" stroke-width="1.5" fill="none" opacity="0.7"/>
+          <circle cx="50" cy="130" r="22" stroke="#C9A84C" stroke-width="1.5" fill="none" opacity="0.7"/>
+          <line x1="68" y1="72" x2="155" y2="140" stroke="#C9A84C" stroke-width="1.5" opacity="0.7"/>
+          <line x1="68" y1="118" x2="155" y2="60" stroke="#C9A84C" stroke-width="1.5" opacity="0.7"/>
+          <circle cx="112" cy="100" r="6" stroke="#E8C97A" stroke-width="1.5" fill="none" opacity="0.8"/>
+          <!-- comb bottom -->
+          <rect x="40" y="185" width="120" height="18" rx="2" stroke="#C9A84C" stroke-width="1" fill="none" opacity="0.5"/>
+          <line x1="55" y1="203" x2="55" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="70" y1="203" x2="70" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="85" y1="203" x2="85" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="100" y1="203" x2="100" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="115" y1="203" x2="115" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="130" y1="203" x2="130" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+          <line x1="145" y1="203" x2="145" y2="225" stroke="#C9A84C" stroke-width="1" opacity="0.5"/>
+        </svg>
+      </div>
+    </div>
+    <div class="about-accent" style="font-family:'Josefin Sans';font-size:0.55rem;">
+      AWARD<br>WINNING<br>ATELIER
+    </div>
+  </div>
+
+  <div class="about-text">
+    <div class="section-label reveal">Our Story</div>
+    <h2 class="about-title reveal">More Than a<br><em>Salon</em> — An Atelier</h2>
+    <div class="gold-divider left reveal"></div>
+    <p class="about-body reveal">AURUM was born from a singular conviction: that hair is the most personal form of artistic expression. Our atelier is a sanctuary where technique meets vision, where every client leaves transformed — not just styled.<br><br>We source only the finest professional products, invest in continuous education, and believe that true luxury is in the details — the consultation, the craft, the care.</p>
+    <a href="#about" class="btn-secondary reveal" style="display:inline-block;">Discover Our Philosophy</a>
+    <div class="stats-row reveal">
+      <div>
+        <span class="stat-num">16+</span>
+        <span class="stat-label">Years of Mastery</span>
+      </div>
+      <div>
+        <span class="stat-num">12k</span>
+        <span class="stat-label">Happy Clients</span>
+      </div>
+      <div>
+        <span class="stat-num">28</span>
+        <span class="stat-label">Awards Won</span>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="section contact" id="contact">
-<h2>Contact & Location</h2>
-<p>📞 +91 9876543210</p>
-<p>📧 urbancut@gmail.com</p>
-<p>📍 SG Highway, Ahmedabad</p>
+<!-- TEAM -->
+<section class="team" id="team">
+  <div class="section-label reveal" style="text-align:center;">Meet The Artists</div>
+  <h2 class="section-title reveal">Our <em>Stylists</em></h2>
+  <div class="gold-divider reveal"></div>
 
-<iframe src="https://www.google.com/maps?q=SG%20Highway%2C%20Ahmedabad&output=embed"></iframe>
+  <div class="team-grid">
+    <div class="stylist-card reveal">
+      <div class="stylist-visual">
+        <svg viewBox="0 0 100 150" width="80" height="120" fill="none">
+          <circle cx="50" cy="45" r="28" stroke="#C9A84C" stroke-width="1" fill="rgba(201,168,76,0.05)"/>
+          <path d="M22 80 Q30 100 50 105 Q70 100 78 80" stroke="#C9A84C" stroke-width="1" fill="none"/>
+          <path d="M30 42 Q50 25 70 42" stroke="#E8C97A" stroke-width="0.8"/>
+          <circle cx="50" cy="45" r="6" fill="#C9A84C" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="stylist-info">
+        <div class="stylist-name">Isabella Laurent</div>
+        <div class="stylist-role">Creative Director</div>
+      </div>
+    </div>
+    <div class="stylist-card reveal" style="transition-delay:0.1s">
+      <div class="stylist-visual">
+        <svg viewBox="0 0 100 150" width="80" height="120" fill="none">
+          <circle cx="50" cy="45" r="28" stroke="#C9A84C" stroke-width="1" fill="rgba(201,168,76,0.05)"/>
+          <path d="M22 80 Q30 100 50 105 Q70 100 78 80" stroke="#C9A84C" stroke-width="1" fill="none"/>
+          <path d="M25 38 Q50 20 75 38" stroke="#E8C97A" stroke-width="0.8"/>
+          <path d="M35 55 Q50 60 65 55" stroke="#C9A84C" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="stylist-info">
+        <div class="stylist-name">Marcus Chen</div>
+        <div class="stylist-role">Color Specialist</div>
+      </div>
+    </div>
+    <div class="stylist-card reveal" style="transition-delay:0.2s">
+      <div class="stylist-visual">
+        <svg viewBox="0 0 100 150" width="80" height="120" fill="none">
+          <circle cx="50" cy="45" r="28" stroke="#C9A84C" stroke-width="1" fill="rgba(201,168,76,0.05)"/>
+          <path d="M22 80 Q30 100 50 105 Q70 100 78 80" stroke="#C9A84C" stroke-width="1" fill="none"/>
+          <ellipse cx="50" cy="38" rx="20" ry="10" stroke="#E8C97A" stroke-width="0.8" fill="none"/>
+        </svg>
+      </div>
+      <div class="stylist-info">
+        <div class="stylist-name">Sofia Reyes</div>
+        <div class="stylist-role">Extension Artist</div>
+      </div>
+    </div>
+    <div class="stylist-card reveal" style="transition-delay:0.3s">
+      <div class="stylist-visual">
+        <svg viewBox="0 0 100 150" width="80" height="120" fill="none">
+          <circle cx="50" cy="45" r="28" stroke="#C9A84C" stroke-width="1" fill="rgba(201,168,76,0.05)"/>
+          <path d="M22 80 Q30 100 50 105 Q70 100 78 80" stroke="#C9A84C" stroke-width="1" fill="none"/>
+          <path d="M30 35 Q50 15 70 35 Q75 45 70 55 Q50 65 30 55 Q25 45 30 35Z" stroke="#E8C97A" stroke-width="0.8" fill="none"/>
+        </svg>
+      </div>
+      <div class="stylist-info">
+        <div class="stylist-name">Anika Patel</div>
+        <div class="stylist-role">Bridal Specialist</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section class="section" id="receipt" style="display:none">
-<h2>Booking Details</h2>
-<p id="receiptData"></p>
+<!-- TESTIMONIALS -->
+<section class="testimonials" id="gallery">
+  <div class="section-label reveal">Client Stories</div>
+  <h2 class="section-title reveal">What They <em>Say</em></h2>
+  <div class="gold-divider reveal"></div>
+
+  <div class="testimonial-slider reveal">
+    <div class="testimonial-item active">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <p class="testimonial-quote">"I've visited salons across Mumbai, Paris, and London. AURUM surpasses them all. Isabella understood my vision immediately — the result was beyond anything I imagined."</p>
+      <div class="testimonial-author">— Priya Sharma, Mumbai</div>
+    </div>
+    <div class="testimonial-item">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <p class="testimonial-quote">"Marcus transformed my hair colour in ways I thought impossible. The balayage is absolutely luminous — I receive compliments daily, weeks later."</p>
+      <div class="testimonial-author">— Kavita Mehta, Ahmedabad</div>
+    </div>
+    <div class="testimonial-item">
+      <div class="testimonial-stars">★ ★ ★ ★ ★</div>
+      <p class="testimonial-quote">"My bridal experience at AURUM was pure magic. Every hair was in place, every curl perfect. On the most important day of my life, I felt like royalty."</p>
+      <div class="testimonial-author">— Riya Joshi, Surat</div>
+    </div>
+    <div class="slider-dots">
+      <div class="dot active" onclick="goSlide(0)"></div>
+      <div class="dot" onclick="goSlide(1)"></div>
+      <div class="dot" onclick="goSlide(2)"></div>
+    </div>
+  </div>
 </section>
 
+<!-- BOOKING -->
+<section class="booking" id="booking">
+  <div class="booking-inner">
+    <div class="section-label reveal">Reserve Your Experience</div>
+    <h2 class="booking-title reveal">Book Your <em>Visit</em></h2>
+    <div class="gold-divider reveal"></div>
+    <p class="booking-sub reveal">Every transformation begins with a conversation. Reserve your private consultation and let us craft something extraordinary for you.</p>
+    <div class="booking-form reveal">
+      <div class="form-row">
+        <input type="text" class="form-input" placeholder="First Name">
+        <input type="text" class="form-input" placeholder="Last Name">
+      </div>
+      <input type="email" class="form-input" placeholder="Email Address">
+      <input type="tel" class="form-input" placeholder="Phone Number">
+      <div class="form-row">
+        <select class="form-select">
+          <option value="">Select Service</option>
+          <option>Precision Cut</option>
+          <option>Color & Balayage</option>
+          <option>Luxury Treatment</option>
+          <option>Bridal Styling</option>
+          <option>Hair Extensions</option>
+          <option>Scalp Ritual</option>
+        </select>
+        <input type="date" class="form-input">
+      </div>
+      <button class="btn-submit">Reserve My Appointment</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
 <footer>
-<p>© 2026 UrbanCut Barber | All Rights Reserved</p>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a href="#" class="logo">A<span>U</span>RUM</a>
+      <p class="footer-tagline">Luxury hair artistry for the<br>discerning individual. Where<br>every strand tells a story.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">IG</a>
+        <a href="#" class="social-link">FB</a>
+        <a href="#" class="social-link">YT</a>
+        <a href="#" class="social-link">TW</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <ul class="footer-links">
+        <li><a href="#">Precision Cuts</a></li>
+        <li><a href="#">Color Artistry</a></li>
+        <li><a href="#">Luxury Treatments</a></li>
+        <li><a href="#">Bridal Styling</a></li>
+        <li><a href="#">Extensions</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Atelier</h4>
+      <ul class="footer-links">
+        <li><a href="#">Our Story</a></li>
+        <li><a href="#">Our Team</a></li>
+        <li><a href="#">Gallery</a></li>
+        <li><a href="#">Press</a></li>
+        <li><a href="#">Careers</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Visit</h4>
+      <ul class="footer-links">
+        <li><a href="#">42 Gold Street</a></li>
+        <li><a href="#">CG Road, Ahmedabad</a></li>
+        <li><a href="#">+91 98765 43210</a></li>
+        <li><a href="#">hello@aurumatelier.in</a></li>
+        <li><a href="#">Mon–Sat: 10–8pm</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2026 AURUM Hair Atelier. All rights reserved.</p>
+    <div class="footer-legal">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Cookies</a>
+    </div>
+  </div>
 </footer>
 
-<a href="https://wa.me/919876543210" class="whatsapp">💬</a>
-
 <script>
-function sendData(e){
-e.preventDefault();
-let name=document.getElementById('name').value;
-let phone=document.getElementById('phone').value;
-let service=document.getElementById('service').value;
-let date=document.getElementById('date').value;
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+  document.body.style.overflow = mobileNav.classList.contains('open') ? 'hidden' : '';
+});
+document.querySelectorAll('.mob-link').forEach(link => {
+  link.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
 
-window.location.href=`mailto:urbancut@gmail.com?subject=New Booking&body=Name:${name}%0APhone:${phone}%0AService:${service}%0ADate:${date}`;
-
-let receipt=`Name: ${name} <br> Phone: ${phone} <br> Service: ${service} <br> Date: ${date}`;
-document.getElementById('receiptData').innerHTML=receipt;
-document.getElementById('receipt').style.display='block';
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = (mx - 6) + 'px';
+  cursor.style.top = (my - 6) + 'px';
+});
+function animRing() {
+  rx += (mx - rx - 20) * 0.12;
+  ry += (my - ry - 20) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
 }
-</script>
+animRing();
+document.querySelectorAll('a,button,.card-3d,.dot,.stylist-card').forEach(el => {
+  el.addEventListener('mouseenter', () => ring.classList.add('expand'));
+  el.addEventListener('mouseleave', () => ring.classList.remove('expand'));
+});
 
+// ANIMATED 3D BACKGROUND CANVAS
+const canvas = document.getElementById('bgCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initStrands();
+});
+
+// Hair strand particles
+const strands = [];
+const NUM_STRANDS = 60;
+function Strand() {
+  this.reset = function() {
+    this.x = Math.random() * canvas.width;
+    this.y = -50;
+    this.len = 60 + Math.random() * 120;
+    this.wave = Math.random() * 40;
+    this.freq = 0.005 + Math.random() * 0.01;
+    this.speed = 0.3 + Math.random() * 0.6;
+    this.opacity = 0.05 + Math.random() * 0.12;
+    this.width = 0.5 + Math.random() * 1.2;
+    this.phase = Math.random() * Math.PI * 2;
+    this.color = Math.random() > 0.5 ? '#C9A84C' : '#8B6914';
+    this.drift = (Math.random() - 0.5) * 0.3;
+  };
+  this.reset();
+  this.y = Math.random() * canvas.height;
+}
+function initStrands() {
+  strands.length = 0;
+  for(let i=0;i<NUM_STRANDS;i++) strands.push(new Strand());
+}
+initStrands();
+
+// Floating orbs
+const orbs = Array.from({length: 8}, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: 80 + Math.random() * 200,
+  vx: (Math.random()-.5)*0.2,
+  vy: (Math.random()-.5)*0.2,
+  opacity: 0.02 + Math.random() * 0.04
+}));
+
+let tick = 0;
+function draw() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  tick++;
+
+  // Orbs
+  orbs.forEach(o => {
+    o.x += o.vx; o.y += o.vy;
+    if(o.x < -o.r) o.x = canvas.width + o.r;
+    if(o.x > canvas.width + o.r) o.x = -o.r;
+    if(o.y < -o.r) o.y = canvas.height + o.r;
+    if(o.y > canvas.height + o.r) o.y = -o.r;
+    const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, o.r);
+    g.addColorStop(0, `rgba(201,168,76,${o.opacity})`);
+    g.addColorStop(1, 'transparent');
+    ctx.beginPath();
+    ctx.arc(o.x, o.y, o.r, 0, Math.PI*2);
+    ctx.fillStyle = g;
+    ctx.fill();
+  });
+
+  // Hair strands
+  strands.forEach(s => {
+    s.y += s.speed;
+    s.x += s.drift;
+    s.phase += s.freq;
+    if(s.y > canvas.height + 100) s.reset();
+
+    ctx.beginPath();
+    ctx.lineWidth = s.width;
+    ctx.strokeStyle = s.color;
+    ctx.globalAlpha = s.opacity;
+
+    const segs = 20;
+    for(let i=0;i<segs;i++) {
+      const t = i/segs;
+      const px = s.x + Math.sin(s.phase + t * 4) * s.wave;
+      const py = s.y - s.len * (1-t);
+      if(i===0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  });
+
+  // Grid lines (very subtle)
+  ctx.globalAlpha = 0.015;
+  ctx.strokeStyle = '#C9A84C';
+  ctx.lineWidth = 0.5;
+  const gridSize = 80;
+  for(let x=0;x<canvas.width;x+=gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x + Math.sin(tick*0.005+x)*3, 0);
+    ctx.lineTo(x + Math.sin(tick*0.005+x+3)*3, canvas.height);
+    ctx.stroke();
+  }
+  ctx.globalAlpha = 1;
+
+  requestAnimationFrame(draw);
+}
+draw();
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting) {
+      e.target.classList.add('visible');
+      obs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15 });
+reveals.forEach(el => obs.observe(el));
+
+// Testimonial slider
+let currentSlide = 0;
+const slides = document.querySelectorAll('.testimonial-item');
+const dots = document.querySelectorAll('.dot');
+function goSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+setInterval(() => goSlide((currentSlide + 1) % slides.length), 5000);
+
+// 3D card tilt effect (desktop only)
+if (window.matchMedia('(hover: hover)').matches) {
+document.querySelectorAll('.card-3d').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width/2;
+    const y = e.clientY - rect.top - rect.height/2;
+    card.style.transform = `translateY(-12px) rotateX(${-y/20}deg) rotateY(${x/20}deg)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    card.style.transform = '';
+  });
+});
+}
+
+// Scroll progress glow on nav
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('nav');
+  if(window.scrollY > 80) {
+    nav.style.background = 'rgba(13,10,6,0.97)';
+  } else {
+    nav.style.background = 'linear-gradient(to bottom, rgba(13,10,6,0.95), transparent)';
+  }
+});
+</script>
 </body>
 </html>
